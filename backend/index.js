@@ -9,6 +9,8 @@ const HOST = process.env.APP_HOST
 const PORT = process.env.APP_PORT
 
 consign()
+    .then('./middlewares/connection.js')
+    .then('./controllers/validation.js')
     .then('./controllers')
     .then('./routes/routes.js')
     .into(app)
