@@ -1,6 +1,6 @@
 module.exports = app => {
     const { existsOrError } = app.controllers.validation
-    const limit = 3
+    const limit = 10
 
     const save = async (req, res) => {
         const post = { ...req.body } // recebe o post pelo body
