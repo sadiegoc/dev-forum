@@ -7,17 +7,37 @@
                 </router-link>
             </div>
             <div class="form">
-                <router-link to="/auth">
+                <router-link v-if="!user" to="/auth">
                     Login / Sign Up
                 </router-link>
+                <router-link v-if="user" to="/create-post">
+                    Create
+                </router-link>
+                <router-link v-if="user" to="/my-posts">
+                    My posts
+                </router-link>
+                <a href v-if="user" @click.prevent="logout">
+                    Logout
+                </a>
             </div>
         </div>
     </header>
 </template>
 
 <script>
+import { userKey } from '@/config/global';
+import { mapState } from 'vuex';
+
 export default {
-    name: 'HeaderComponent'
+    name: 'HeaderComponent',
+    computed: mapState(['user']),
+    methods: {
+        logout () {
+            localStorage.removeItem(userKey)
+            this.$store.state.user = null
+            this.$router.push({ name: 'home' })
+        }
+    }
 }
 </script>
 
@@ -51,7 +71,7 @@ header {
     color: white;
     font-size: 0.9rem;
     border: 1px solid white;
-    padding: 10px;
+    padding: 6px;
 }
 
 .form a:hover {
@@ -59,9 +79,13 @@ header {
     color: var(--color-theme);
 }
 
-@media (max-width: 420px) {
+@media (max-width: 480px) {
     .container {
         padding: 0 10px;
+    }
+
+    .brand a, .form a {
+        font-size: 0.9rem;
     }
 }
 </style>

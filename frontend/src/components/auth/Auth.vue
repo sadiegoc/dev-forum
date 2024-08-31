@@ -40,6 +40,7 @@
 </template>
 
 <script>
+import { userKey } from '@/config/global';
 import auth from '@/services/auth';
 
 export default {
@@ -66,15 +67,15 @@ export default {
                 }
 
                 auth.login(user)
-                    .then(resp => {
-                        console.log(resp.data)
+                    .then(res => {
+                        this.$store.commit('setUser', res.data)
+                        localStorage.setItem(userKey, JSON.stringify(res.data))
+                        this.$router.push({ name: 'home' })
                     })
                     .catch(err => this.msg = err.response.data)
             } else { // se estiver se registrando
                 auth.register(this.user)
-                    .then(() => {
-                        this.login = true
-                    })
+                    .then(() => this.login = true)
                     .catch(err => this.msg = err.response.data)
             }
         }
