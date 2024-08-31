@@ -3,23 +3,20 @@ module.exports = app => {
     app.post('/signin', app.controllers.user.login)
     app.post('/validate-token', app.controllers.user.validateToken)
 
-    app.route('/post')
+    app.route('/posts')
         .get(app.controllers.post.getAll)
-        .post(
-            app.middlewares.passport.authenticate(),
-            app.controllers.post.save
-        )
     
-    app.route('/post/:id')
-        .get(app.controllers.post.getById)
-        .patch(
-            app.middlewares.passport.authenticate(),
-            app.controllers.post.edit
-        )
-        .delete(
-            app.middlewares.passport.authenticate(),
-            app.controllers.post.remove
-        )
+    app.route('/posts/my-posts')
+        .get(app.controllers.post.getByUserId)
+        .post(app.middlewares.passport.authenticate(), app.controllers.post.save)
+
+    app.route('/posts/my-posts/:id')
+        .all(app.middlewares.passport.authenticate())
+        .patch(app.controllers.post.edit)
+        .delete(app.controllers.post.remove)
+
+    app.route('/posts/:id') // id do post
+        .get(app.controllers.post.getByPostId)
 
     app.route('/comment')
         .all(app.middlewares.passport.authenticate())

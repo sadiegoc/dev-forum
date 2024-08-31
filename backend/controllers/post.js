@@ -1,5 +1,6 @@
 module.exports = app => {
     const { existsOrError } = app.controllers.validation
+    const limit = 3
 
     const save = async (req, res) => {
         const post = { ...req.body } // recebe o post pelo body
@@ -21,11 +22,11 @@ module.exports = app => {
             .catch(err => res.status(500).send(err))
     }
 
-    const getById = (req, res) => {
-        if (!req.params.id) res.status(400).send('Post not given')
-        const id = req.params.id
+    const getByPostId = async (req, res) => {
+        if (!req.body.id) res.status(400).send('Post not given')
+        const id = req.body.id
 
-        app.db('posts')
+        await app.db('posts')
             .leftJoin('comments', 'posts.id', '=', 'comments.postId')
             .leftJoin('users as postUser', 'posts.userId', '=', 'postUser.id')
             .leftJoin('users as commentUser', 'comments.userId', '=', 'commentUser.id')
@@ -71,9 +72,48 @@ module.exports = app => {
             .catch(err => res.status(500).send(err))
     }
 
+    const getByUserId = async (req, res) => {
+        if (!req.query.id) res.status(400).send('User not given')
+        const id = req.query.id
+        const page = req.query.page || 1
+
+        try {
+            const posts = await app.db('posts')
+                .leftJoin('users', 'users.id', '=', 'posts.userId')
+                .select(
+                    'posts.id',
+                    'posts.title',
+                    'posts.created_at as createdAt',
+                    'posts.userId as userId',
+                    
+                    'users.firstName as userFirstName',
+                    'users.lastName as userLastName'
+                )
+                .limit(limit).offset(page * limit - limit)
+                .where({'users.id': id})
+                .orderBy('createdAt', 'desc')
+            res.status(200).send(posts)
+        } catch (err) {
+            res.status(500).send(err)
+        }
+    }
+
     const getAll = async (req, res) => {
+        const page = req.query.page || 1
+
         app.db('posts')
-            .select('id', 'title', 'userId')
+            .leftJoin('users', 'users.id', '=', 'posts.userId')
+            .select(
+                'posts.id',
+                'posts.title',
+                'posts.created_at as createdAt',
+                'posts.userId as userId',
+                
+                'users.firstName as userFirstName',
+                'users.lastName as userLastName'
+            )
+            .limit(limit).offset(page * limit - limit)
+            .orderBy('createdAt', 'desc')
             .then(posts => res.status(200).json(posts))
             .catch(err => res.status(500).send(err))
     }
@@ -106,5 +146,5 @@ module.exports = app => {
         }
     }
 
-    return { save, getAll, getById, remove, edit }
+    return { save, getAll, getByPostId, getByUserId, remove, edit }
 }

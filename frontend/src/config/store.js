@@ -1,9 +1,10 @@
 import axios from "axios";
 import { createStore } from "vuex";
+import { userKey } from "./global";
 
 export default createStore({
     state: {
-        user: null
+        user: JSON.parse(localStorage.getItem(userKey)) || null
     },
     mutations: {
         setUser (state, user) {
