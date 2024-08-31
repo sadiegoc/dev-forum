@@ -2,7 +2,7 @@
     <section class="home">
         <div class="container">
             <div class="posts">
-                <div class="post" v-for="post in posts" :key="post.id">
+                <div class="post" v-for="post in posts" :key="post.id" @click.prevent="openPost(post.id)">
                     <h1 class="title"><span>Title:</span> {{ post.title }}</h1>
                     <h2 class="subtitle"><span>Author:</span> {{ post.userFirstName }} {{ post.userLastName }}</h2>
                     <p class="date">{{ post.createdAt }}</p>
@@ -33,13 +33,16 @@ export default {
                         const date = new Date(post.createdAt)
                         const formattedDate = date.toLocaleDateString('pt-BR')
 
-                        return { ...post, createdAt: formattedDate}
+                        return { ...post, createdAt: formattedDate }
                     })
                 )
                 this.page++
 
                 if (res.data.length === 0) this.loadMore = false
             }).catch(err => console.log(err))
+        },
+        openPost (id) {
+            this.$router.push({ path: `/post/${id}` })
         }
     },
     mounted () {

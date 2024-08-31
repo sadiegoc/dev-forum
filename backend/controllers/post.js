@@ -23,8 +23,8 @@ module.exports = app => {
     }
 
     const getByPostId = async (req, res) => {
-        if (!req.body.id) res.status(400).send('Post not given')
-        const id = req.body.id
+        if (!req.params.id) res.status(400).send('Post not given')
+        const id = req.params.id
 
         await app.db('posts')
             .leftJoin('comments', 'posts.id', '=', 'comments.postId')

@@ -15,7 +15,7 @@ module.exports = app => {
         .patch(app.controllers.post.edit)
         .delete(app.controllers.post.remove)
 
-    app.route('/posts/:id') // id do post
+    app.route('/posts/:id')
         .get(app.controllers.post.getByPostId)
 
     app.route('/comment')
