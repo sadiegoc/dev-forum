@@ -9,6 +9,7 @@ const HOST = process.env.APP_HOST
 const PORT = process.env.APP_PORT
 
 consign()
+    .include('./middlewares/passport.js')
     .then('./middlewares/connection.js')
     .then('./controllers/validation.js')
     .then('./controllers')

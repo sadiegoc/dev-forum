@@ -54,17 +54,17 @@ module.exports = app => {
 
         // testes de validação das informações
         try {
-            existsOrError(user.firstName, 'First name not given')
-            existsOrError(user.lastName, 'Last name not given')
-            existsOrError(user.email, 'E-mail not given')
-            existsOrError(user.password, 'Password not given')
-            existsOrError(user.confirmPassword, 'Password confirmation not given')
-            equalsOrError(user.password, user.confirmPassword, 'Passwords don\'t match')
+            existsOrError(user.firstName, 'First name not given!')
+            existsOrError(user.lastName, 'Last name not given!')
+            existsOrError(user.email, 'E-mail not given!')
+            existsOrError(user.password, 'Password not given!')
+            existsOrError(user.confirmPassword, 'Password confirmation not given!')
+            equalsOrError(user.password, user.confirmPassword, 'Passwords don\'t match!')
 
             // verificando se já existe o usuário no banco de dados
             const userFromDB = await app.db('users').where({ email: user.email }).first()
             if (!user.id) // caso seja um update de usuário, não é necessário entar aqui
-                notExistsOrError(userFromDB, 'This E-mail already exists')
+                notExistsOrError(userFromDB, 'This E-mail already exists!')
         } catch (err) {
             return res.status(400).send(err)
         }
