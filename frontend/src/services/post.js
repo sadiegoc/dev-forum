@@ -19,6 +19,10 @@ class Post {
         })
     }
 
+    remove (id) {
+        return http.delete(`/posts/my-posts/${id}`)
+    }
+
     getAll (page) {
         return http.get(`/posts?page=${page}`)
     }

@@ -2,7 +2,13 @@
     <section class="post">
         <div class="container">
             <div class="header">
-                <h1 class="title">{{ currentPost.title }}</h1>
+                <h1 class="title">
+                    {{ currentPost.title }}
+                    <div class="buttons">
+                        <button @click.prevent="remove" class="delete">Delete</button>
+                        <button @click.prevent="edit" class="edit">Edit</button>
+                    </div>
+                </h1>
                 <h2 class="author"><span>published by</span> {{ currentPost.userFirstName }} {{ currentPost.userLastName }}</h2>
                 <p class="date">{{ currentPost.createdAt }}</p>
             </div>
@@ -13,9 +19,11 @@
 
 <script>
 import post from '@/services/post';
+import { mapState } from 'vuex';
 
 export default {
     name: 'PostView',
+    computed: mapState(['user']),
     data: function () {
         return {
             currentPost: {}
@@ -36,6 +44,14 @@ export default {
                     this.currentPost = { ...resp.data, createdAt: formattedDate, content: contentUTF8 }
                 }).catch(err => console.log(err))
             }
+        },
+        remove () {
+            post.remove(this.currentPost.id)
+                .then(() => this.$router.push({ name: 'my-posts' }))
+                .catch(err => console.log(err))
+        },
+        edit () {
+            
         }
     },
     mounted () {
@@ -72,6 +88,22 @@ export default {
     font-size: 1.4rem;
     color: var(--color-theme);
     font-weight: 600;
+
+    display: flex; justify-content: space-between;
+}
+
+.header h1 button {
+    border: 1px solid var(--color-theme);
+    color: var(--color-theme);
+    padding: 6px 12px;
+    background-color: transparent;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.header h1 button:hover {
+    background-color: var(--color-theme);
+    color: white;
 }
 
 .header h2 {
