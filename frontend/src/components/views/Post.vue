@@ -4,7 +4,7 @@
             <div class="header">
                 <h1 class="title">
                     {{ currentPost.title }}
-                    <div class="buttons">
+                    <div class="buttons" v-if="user && user.id == currentPost.userId">
                         <button @click.prevent="remove" class="delete">Delete</button>
                         <button @click.prevent="edit" class="edit">Edit</button>
                     </div>
@@ -14,10 +14,33 @@
             </div>
             <div class="content" v-html="currentPost.content"></div>
         </div>
+        <div class="container">
+            <h1 class="title">Comments</h1>
+            <div class="newComment" v-if="user">
+                <div class="box">
+                    <textarea v-model="comment.content"></textarea>
+                </div>
+                <div class="btn">
+                    <button @click.prevent="send" class="send">Send</button>
+                </div>
+            </div>
+            <div class="comments" v-if="this.currentPost.comments">
+                <div class="comment" v-for="comment in this.currentPost.comments" :key="comment.id">
+                    <div class="name">
+                        <span>User: </span>
+                        {{ comment.userFirstName }} {{ comment.userLastName }}
+                    </div>
+                    <div class="content">
+                        {{ comment.content }}
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 </template>
 
 <script>
+import comment from '@/services/comment';
 import post from '@/services/post';
 import { mapState } from 'vuex';
 
@@ -26,7 +49,8 @@ export default {
     computed: mapState(['user']),
     data: function () {
         return {
-            currentPost: {}
+            currentPost: {},
+            comment: {}
         }
     },
     methods: {
@@ -46,12 +70,19 @@ export default {
             }
         },
         remove () {
-            post.remove(this.currentPost.id)
+            post.remove(this.currentPost.id, this.user.token)
                 .then(() => this.$router.push({ name: 'my-posts' }))
                 .catch(err => console.log(err))
         },
         edit () {
-            
+            this.$router.push({ name: 'edit', params: { postId: this.currentPost.id } })
+        },
+        send () {
+            this.comment.userId = this.user.id
+            this.comment.postId = this.currentPost.id
+            comment.send(this.comment, this.user.token)
+                .then(() => this.$router.push({ name: 'post', params: { postId: this.currentPost.id } }))
+                .catch(err => console.log(err))
         }
     },
     mounted () {
@@ -77,6 +108,11 @@ export default {
 
     display: flex; flex-direction: column;
     justify-content: flex-start; align-items: flex-start;
+}
+
+.container h1 {
+    margin: 10px 0; padding: 0;
+    font-size: 1rem;
 }
 
 .header {
@@ -117,6 +153,57 @@ export default {
 .header p {
     font-size: 0.9rem;
     color: #555;
+}
+
+.box, .comments, .newComment {
+    width: 100%; height: fit-content;
+}
+
+.newComment {
+    margin: 0 0 20px 0;
+}
+
+.box textarea {
+    width: 100%; height: 150px;
+    padding: 10px; box-sizing: border-box;
+    border: 1px solid #ccc;
+    background-color: #f8f8f8; resize: none;
+    font-size: 0.9rem;
+    outline: none;
+}
+
+.newComment .btn {
+    text-align: right;
+}
+
+.newComment button {
+    color: white;
+    background-color: var(--color-theme);
+    border: none; cursor: pointer;
+    padding: 7px 14px;
+    margin-top: 10px;
+}
+
+.comments {
+    width: 100%; height: auto;
+    display: flex; flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.comment {
+    border: 1px solid #ccc;
+    background-color: #f8f8f8;
+    padding: 10px; box-sizing: border-box;
+}
+
+.comment .name {
+    font-weight: 600;
+    border-bottom: 1px dashed #ccc;
+    padding-bottom: 8px;
+}
+
+.comment .content {
+    padding-top: 5px;
 }
 
 </style>

@@ -68,7 +68,25 @@ export default {
             this.post = {}
             this.msg = ""
             this.err = false
+            this.id = null
+        },
+        loadPost (id) {
+            post.getByPostId(id).then(res => {
+                const uint8Array = new Uint8Array(res.data.content.data);
+                const decoder = new TextDecoder('utf-8');
+                const contentUTF8 = decoder.decode(uint8Array);
+
+                this.post = { ...res.data, content: contentUTF8 }
+                this.id = res.data.id
+            })
+            .catch(err => {
+                console.log(err)
+                this.$router.push({ name: 'my-posts' })
+            })
         }
+    },
+    mounted () {
+        if (this.$route.params.postId) this.loadPost(this.$route.params.postId)
     }
 }
 </script>

@@ -25,6 +25,10 @@ const routes = [
         path: '/post/:postId',
         name: 'post',
         component: () => import('@/components/views/Post.vue')
+    }, {
+        path: '/edit/:postId',
+        name: 'edit',
+        component: () => import('@/components/views/Create.vue')
     }
 ]
 

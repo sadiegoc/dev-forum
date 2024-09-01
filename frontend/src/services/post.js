@@ -11,7 +11,7 @@ class Post {
     }
 
     edit (post, id, token) {
-        return http.patch(`/post/${id}`, post, {
+        return http.patch(`/posts/my-posts/${id}`, post, {
             headers: {
                 'Authorization': `bearer ${token}`,
                 'Content-Type': 'application/json'
@@ -19,8 +19,13 @@ class Post {
         })
     }
 
-    remove (id) {
-        return http.delete(`/posts/my-posts/${id}`)
+    remove (id, token) {
+        return http.delete(`/posts/my-posts/${id}`, {
+            headers: {
+                'Authorization': `bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        })
     }
 
     getAll (page) {
