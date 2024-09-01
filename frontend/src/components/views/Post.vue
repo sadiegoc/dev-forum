@@ -81,7 +81,10 @@ export default {
             this.comment.userId = this.user.id
             this.comment.postId = this.currentPost.id
             comment.send(this.comment, this.user.token)
-                .then(() => this.$router.push({ name: 'post', params: { postId: this.currentPost.id } }))
+                .then(() => {
+                    this.loadPost()
+                    this.comment.content = ""
+                })
                 .catch(err => console.log(err))
         }
     },
@@ -187,13 +190,13 @@ export default {
 .comments {
     width: 100%; height: auto;
     display: flex; flex-direction: column;
-    margin-bottom: 20px;
 }
 
 .comment {
     border: 1px solid #ccc;
     background-color: #f8f8f8;
     padding: 10px; box-sizing: border-box;
+    margin-bottom: 20px;
 }
 
 .comment .name {
