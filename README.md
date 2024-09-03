@@ -1,4 +1,10 @@
-# Dev Forum
+<h1 align="center">
+ Dev Forum
+</h1>
+<p align="center">
+  <img src="https://img.shields.io/badge/Vue%20js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D"/>
+  <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge"/>
+</p>
 
 ## 📜 Descrição
 O Dev Forum é uma aplicação de fórum online desenvolvida para permitir que desenvolvedores discutam e compartilhem conhecimento sobre programação. Com funcionalidades como criação de posts, comentários, e autenticação de usuários, o Dev Forum é um espaço colaborativo para troca de ideias e resolução de problemas.
