@@ -42,14 +42,13 @@ Crie um arquivo .env na pasta backend e adicione as configurações necessárias
 npm start
 ```
 
-+ Instale as dependências do frontend:
++ frontend:
 ```
-cd ../frontend
+# instale as dependências
+cd frontend
 npm install
-```
 
-+ Inicie o servidor frontend:
-```
+# inicie o servidor
 npm run serve
 ```
 
