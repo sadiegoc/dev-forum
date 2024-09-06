@@ -5,7 +5,7 @@
                 <h1 class="title">
                     {{ currentPost.title }}
                     <div class="buttons" v-if="user && user.id == currentPost.userId">
-                        <button @click.prevent="remove" class="delete">Delete</button>
+                        <button @click.prevent="removePost" class="delete">Delete</button>
                         <button @click.prevent="edit" class="edit">Edit</button>
                     </div>
                 </h1>
@@ -27,8 +27,13 @@
             <div class="comments" v-if="this.currentPost.comments">
                 <div class="comment" v-for="comment in this.currentPost.comments" :key="comment.id">
                     <div class="name">
-                        <span>User: </span>
-                        {{ comment.userFirstName }} {{ comment.userLastName }}
+                        <div class="username">
+                            <span>User: </span>
+                            {{ comment.userFirstName }} {{ comment.userLastName }}
+                        </div>
+                        <div class="buttons" v-if="user && user.id == comment.userId">
+                            <button @click.prevent="removeComment(comment.id)" class="delete">Delete</button>
+                        </div>
                     </div>
                     <div class="content">
                         {{ comment.content }}
@@ -69,7 +74,7 @@ export default {
                 }).catch(err => console.log(err))
             }
         },
-        remove () {
+        removePost () {
             post.remove(this.currentPost.id, this.user.token)
                 .then(() => this.$router.push({ name: 'my-posts' }))
                 .catch(err => console.log(err))
@@ -86,6 +91,9 @@ export default {
                     this.comment.content = ""
                 })
                 .catch(err => console.log(err))
+        },
+        removeComment (id) {
+            comment.remove(id, this.user.token).then(() => this.loadPost()).catch(err => console.log(err))
         }
     },
     mounted () {
@@ -131,7 +139,7 @@ export default {
     display: flex; justify-content: space-between;
 }
 
-.header h1 button {
+.buttons button {
     border: 1px solid var(--color-theme);
     color: var(--color-theme);
     padding: 6px 12px;
@@ -140,7 +148,7 @@ export default {
     margin-left: 10px;
 }
 
-.header h1 button:hover {
+.buttons button:hover {
     background-color: var(--color-theme);
     color: white;
 }
@@ -203,6 +211,9 @@ export default {
     font-weight: 600;
     border-bottom: 1px dashed #ccc;
     padding-bottom: 8px;
+
+    display: flex; justify-content: space-between;
+    align-items: center;
 }
 
 .comment .content {

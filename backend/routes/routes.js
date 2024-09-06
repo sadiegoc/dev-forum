@@ -24,6 +24,6 @@ module.exports = app => {
 
     app.route('/comment/:id')
         .all(app.middlewares.passport.authenticate())
-        .patch(app.controllers.comment.edit)
+        // .patch(app.controllers.comment.edit)
         .delete(app.controllers.comment.remove)
 }

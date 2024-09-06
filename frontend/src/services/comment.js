@@ -9,6 +9,15 @@ class Comment {
             }
         })
     }
+
+    remove (id, token) {
+        return http.delete(`/comment/${id}`, {
+            headers: {
+                'Authorization': `bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        })
+    }
 }
 
 export default new Comment()
