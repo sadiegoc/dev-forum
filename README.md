@@ -42,14 +42,13 @@ Crie um arquivo .env na pasta backend e adicione as configurações necessárias
 npm start
 ```
 
-+ Instale as dependências do frontend:
++ frontend:
 ```
-cd ../frontend
+# instale as dependências
+cd frontend
 npm install
-```
 
-+ Inicie o servidor frontend:
-```
+# inicie o servidor
 npm run serve
 ```
 
@@ -60,4 +59,5 @@ Este projeto está sob a licença MIT. Veja o arquivo LICENSE para mais detalhes
 Se tiver alguma dúvida ou sugestão, sinta-se à vontade para abrir uma issue ou entrar em contato:
 + E-mail: diego.sa1687@gmail.com
 + LinkedIn: [sadiegoc](https://www.linkedin.com/in/sadiegoc/)
++ Portfólio: https://sadiegoc.netlify.app
  
